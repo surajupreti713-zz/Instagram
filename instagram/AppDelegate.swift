@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Parse
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,7 +16,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        Parse.initialize(
+            with: ParseClientConfiguration(block: { (configuration:ParseMutableClientConfiguration) -> Void in
+                configuration.applicationId = "instagram"
+                configuration.clientKey = "Unitedlfes713"  // set to nil assuming you have not set clientKey
+                configuration.server = "https://tranquil-chamber-16185.herokuapp.com/parse"
+            })
+        )
+        if User.currentUser != nil {
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let viewController = storyboard.instantiateViewController(withIdentifier: "loginNavigationController")
+            window?.rootViewController = viewController
+            print("The current user is \((User.currentUser?.username)!)")
+        }
+        else {
+            print("No current user saved")
+        }
+        
+        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: User.userDidLogoutNotification), object: nil, queue: OperationQueue.main) { (Notification) in
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let viewController = storyboard.instantiateInitialViewController()
+            self.window?.rootViewController = viewController
+        }
+        
+        
         return true
     }
 
