@@ -22,9 +22,6 @@ class HomeViewController: UIViewController,UIImagePickerControllerDelegate, UINa
         tableViewOutlet.delegate = self
         tableViewOutlet.dataSource = self
         
-        tableViewOutlet.rowHeight = UITableViewAutomaticDimension
-        tableViewOutlet.estimatedRowHeight = 120
-        
         getPosts()
     }
     
